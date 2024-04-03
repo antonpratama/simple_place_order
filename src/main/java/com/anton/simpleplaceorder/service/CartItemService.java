@@ -51,13 +51,23 @@ public class CartItemService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
 
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setProduct(product);
-        cartItem.setQuantity(request.getQuantity());
-        cartItem.setPrice(request.getPrice());
+        CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product);
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
+            cartItem.setPrice(cartItem.getPrice() + request.getPrice());
 
-        cartItemRepository.save(cartItem);
+            cartItemRepository.save(cartItem);
+        }
+        else {
+            cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(request.getQuantity());
+            cartItem.setPrice(request.getPrice());
+
+            cartItemRepository.save(cartItem);
+        }
+
 
         return CartItemResponse.builder()
                 .id(cartItem.getId())
