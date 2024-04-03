@@ -1,10 +1,12 @@
 package com.anton.simpleplaceorder.service;
 
+import com.anton.simpleplaceorder.entity.Cart;
 import com.anton.simpleplaceorder.entity.Customer;
 import com.anton.simpleplaceorder.model.CreateCartRequest;
 import com.anton.simpleplaceorder.model.CreateCustomerRequest;
 import com.anton.simpleplaceorder.model.CustomerResponse;
 import com.anton.simpleplaceorder.model.UpdateCustomerRequest;
+import com.anton.simpleplaceorder.repository.CartRepository;
 import com.anton.simpleplaceorder.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class CustomerService {
     private ValidationService validationService;
 
     @Autowired
-    private CartService cartService;
+    private CartRepository cartRepository;
 
     @Transactional
     public void create(CreateCustomerRequest request){
@@ -37,10 +39,10 @@ public class CustomerService {
 
         customerRepository.save(customer);
 
-        CreateCartRequest createCartRequest = new CreateCartRequest();
-        createCartRequest.setCustomer(customer);
+        Cart cart = new Cart();
+        cart.setCustomer(customer);
 
-        cartService.create(createCartRequest);
+        cartRepository.save(cart);
     }
 
     public CustomerResponse get(Long customerId){

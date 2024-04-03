@@ -21,3 +21,34 @@ create table cart (
     PRIMARY KEY(id),
     FOREIGN KEY(customer_id) REFERENCES customer(id)
 ) ENGINE InnoDB;
+
+create table cart_item (
+    id VARCHAR(266) NOT NULL ,
+    cart_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    quantity integer NOT NULL,
+    price double NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(cart_id) REFERENCES cart(id),
+    FOREIGN KEY(product_id) REFERENCES product(id)
+) ENGINE InnoDB;
+
+create table orders(
+    id VARCHAR(266) NOT NULL,
+    customer_id bigint NOT NULL,
+    status VARCHAR(266) NOT NULL,
+    total_price double NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(customer_id) REFERENCES customer(id)
+) ENGINE InnoDB;
+
+create table orders_item(
+    id VARCHAR(266) NOT NULL,
+    orders_id VARCHAR(266) NOT NULL,
+    product_id bigint NOT NULL,
+    quantity integer NOT NULL,
+    price double NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(orders_id) REFERENCES orders(id),
+    FOREIGN KEY(product_id) REFERENCES product(id)
+) ENGINE InnoDB;
